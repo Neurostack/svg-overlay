@@ -42,6 +42,10 @@
             self.resize();
         });
 
+        this._viewer.addHandler('rotate', function() {
+            self.resize();
+        });
+
         this._viewer.addHandler('open', function() {
             self.resize();
         });
@@ -69,10 +73,16 @@
             }
 
             var p = this._viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
+            var c = new OpenSeadragon.Point(
+                this._viewer.viewport.viewer.drawer.canvas.width / 2,
+                this._viewer.viewport.viewer.drawer.canvas.height / 2);
             var zoom = this._viewer.viewport.getZoom(true);
             // TODO: Expose an accessor for _containerInnerSize in the OSD API so we don't have to use the private variable.
             var scale = this._viewer.viewport._containerInnerSize.x * zoom;
+            var degrees = this._viewer.viewport.getRotation();
+            
             this._node.setAttribute('transform',
+                'rotate(' + degrees + ',' + c.x + ',' + c.y + ') '+
                 'translate(' + p.x + ',' + p.y + ') scale(' + scale + ')');
         },
 
